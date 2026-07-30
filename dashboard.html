@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Performance Dashboard | Parthasarathi S</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --navy:#12233F;
+    --navy-2:#1F3864;
+    --accent:#2E7DAF;
+    --accent-2:#4FA3D1;
+    --bg:#F7F9FB;
+    --card:#FFFFFF;
+    --line:#E3E8EE;
+    --text:#1A2433;
+    --sub:#5B6B80;
+    --good:#2F8F5B;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    font-family:'Segoe UI', Arial, sans-serif;
+    color:var(--text);
+  }
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    padding:40px 24px 80px;
+  }
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:16px;
+    border-bottom:2px solid var(--navy-2);
+    padding-bottom:20px;
+    margin-bottom:32px;
+  }
+  header h1{
+    font-size:28px;
+    margin:0 0 6px;
+    color:var(--navy);
+    letter-spacing:-0.01em;
+  }
+  header p{
+    margin:0;
+    color:var(--sub);
+    font-size:14px;
+  }
+  .tag{
+    font-size:12px;
+    font-weight:600;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin-bottom:4px;
+    display:block;
+  }
+  .kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:36px;
+  }
+  .kpi{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px;
+  }
+  .kpi .label{
+    font-size:12px;
+    color:var(--sub);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    margin-bottom:8px;
+  }
+  .kpi .value{
+    font-size:26px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .kpi .value.good{color:var(--good);}
+  .grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:20px;
+    margin-bottom:24px;
+  }
+  .panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px;
+  }
+  .panel h2{
+    font-size:15px;
+    margin:0 0 16px;
+    color:var(--navy);
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+  th{
+    text-align:left;
+    padding:8px 10px;
+    background:var(--navy-2);
+    color:#fff;
+    font-weight:600;
+  }
+  th:not(:first-child), td:not(:first-child){text-align:right;}
+  td{
+    padding:8px 10px;
+    border-bottom:1px solid var(--line);
+  }
+  tr:last-child td{border-bottom:none;}
+  .chart-box{position:relative; height:260px;}
+  .stack{display:flex; flex-direction:column; gap:20px;}
+  footer{
+    margin-top:40px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-size:13px;
+    color:var(--sub);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  footer a{color:var(--accent); text-decoration:none; font-weight:600;}
+  .skillrow{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:14px;
+  }
+  .pill{
+    background:#EAF1F8;
+    color:var(--navy-2);
+    font-size:12px;
+    font-weight:600;
+    padding:5px 12px;
+    border-radius:20px;
+  }
+  @media (max-width:760px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr);}
+    .grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <span class="tag">Live Data Project</span>
+      <h1>Sales Performance Dashboard</h1>
+      <p>Oracle SQL &amp; Excel-based revenue tracking across regions and product categories</p>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-weight:600;color:var(--navy);">Parthasarathi S</div>
+      <div style="font-size:13px;color:var(--sub);">Oracle SQL Developer · Data Analyst</div>
+    </div>
+  </header>
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="label">Total Revenue</div>
+      <div class="value">₹1,54,69,300</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Total Profit</div>
+      <div class="value good">₹48,59,521</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Profit Margin</div>
+      <div class="value">31.4%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Total Orders</div>
+      <div class="value">90</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Revenue &amp; Profit by Region</h2>
+      <div class="chart-box"><canvas id="regionChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <h2>Revenue Share by Category</h2>
+      <div class="chart-box"><canvas id="categoryChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Region-wise Summary</h2>
+    <table>
+      <thead>
+        <tr><th>Region</th><th>Revenue (₹)</th><th>Profit (₹)</th><th>Orders</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>North</td><td>55,87,400</td><td>17,65,039</td><td>28</td></tr>
+        <tr><td>South</td><td>31,36,400</td><td>9,65,757</td><td>18</td></tr>
+        <tr><td>East</td><td>36,58,900</td><td>11,62,788</td><td>20</td></tr>
+        <tr><td>West</td><td>30,86,600</td><td>9,65,937</td><td>24</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div>
+      Built with Oracle SQL-style SUMIFS/VLOOKUP logic, replicated here as a live web dashboard.
+      <div class="skillrow">
+        <span class="pill">Excel</span>
+        <span class="pill">VLOOKUP</span>
+        <span class="pill">SUMIFS</span>
+        <span class="pill">Power BI concepts</span>
+        <span class="pill">Data Visualization</span>
+      </div>
+    </div>
+    <div>
+      <a href="https://github.com/parthasarathi2012/sales-performance-dashboard-excel" target="_blank">View source workbook on GitHub →</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const regionLabels = ["North","South","East","West"];
+  const revenueData = [5587400, 3136400, 3658900, 3086600];
+  const profitData  = [1765039, 965757, 1162788, 965937];
+
+  new Chart(document.getElementById('regionChart'), {
+    type: 'bar',
+    data: {
+      labels: regionLabels,
+      datasets: [
+        { label:'Revenue (₹)', data: revenueData, backgroundColor:'#2E7DAF', borderRadius:4 },
+        { label:'Profit (₹)', data: profitData, backgroundColor:'#8FC1E3', borderRadius:4 }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } } },
+      scales:{
+        y:{ ticks:{ callback:v => '₹'+(v/100000).toFixed(0)+'L', font:{size:10} }, grid:{color:'#EEF2F6'} },
+        x:{ grid:{display:false} }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('categoryChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ["Computing","Peripherals","Accessories"],
+      datasets: [{
+        data: [11935000, 2686300, 848000],
+        backgroundColor: ['#1F3864','#2E7DAF','#8FC1E3'],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{size:11} } } },
+      cutout:'62%'
+    }
+  });
+</script>
+
+</body>
+</html>
