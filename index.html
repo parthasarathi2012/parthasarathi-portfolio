@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -18,6 +19,7 @@
   --mono:'DM Mono',monospace;
   --display:'Playfair Display',serif;
   --body:'DM Sans',sans-serif;
+  --good:#7fd6a0;
 }
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;overflow-x:hidden;}
@@ -117,6 +119,29 @@ section{padding:5rem 4rem;max-width:1100px;margin:0 auto;}
 .proj-link{font-family:var(--mono);font-size:10.5px;letter-spacing:0.5px;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s;}
 .proj-link:hover{color:var(--gold2);}
 
+/* LIVE DASHBOARD SECTION */
+.dash-section{background:var(--bg4);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);padding:5rem 4rem;}
+.dash-inner{max-width:1100px;margin:0 auto;}
+.dash-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:2rem 0;}
+.dash-kpi{background:var(--bg2);border:0.5px solid var(--border);border-radius:6px;padding:1.25rem;}
+.dash-kpi .dk-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text4);text-transform:uppercase;margin-bottom:.5rem;}
+.dash-kpi .dk-value{font-family:var(--display);font-size:1.5rem;font-weight:700;color:var(--gold);}
+.dash-kpi .dk-value.good{color:var(--good);}
+.dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px;}
+.dash-panel{background:var(--bg2);border:0.5px solid var(--border);border-radius:6px;padding:1.5rem;}
+.dash-panel h3{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--text4);text-transform:uppercase;margin-bottom:1rem;}
+.dash-chart-box{position:relative;height:240px;}
+.dash-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.dash-table th{text-align:left;padding:8px 10px;background:var(--bg3);color:var(--gold);font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+.dash-table th:not(:first-child), .dash-table td:not(:first-child){text-align:right;}
+.dash-table td{padding:8px 10px;border-bottom:0.5px solid var(--border);color:var(--text2);}
+.dash-table tr:last-child td{border-bottom:none;}
+.dash-note{font-size:12.5px;color:var(--text3);margin-top:1.5rem;line-height:1.7;}
+@media(max-width:768px){
+  .dash-kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .dash-grid{grid-template-columns:1fr;}
+}
+
 /* SQL SHOWCASE */
 .sql-section{background:var(--bg4);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);padding:5rem 4rem;}
 .sql-inner{max-width:1100px;margin:0 auto;}
@@ -162,6 +187,7 @@ footer{padding:1.5rem 4rem;border-top:0.5px solid var(--border);display:flex;jus
   section{padding:3rem 1.5rem;}
   .sql-grid{grid-template-columns:1fr;}
   .sql-section{padding:3rem 1.5rem;}
+  .dash-section{padding:3rem 1.5rem;}
   .contact-section{padding:3rem 1.5rem;}
   footer{padding:1.5rem;}
 }
@@ -176,6 +202,7 @@ footer{padding:1.5rem 4rem;border-top:0.5px solid var(--border);display:flex;jus
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="#dashboard">Dashboard</a></li>
     <li><a href="#sql">SQL</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -348,7 +375,7 @@ footer{padding:1.5rem 4rem;border-top:0.5px solid var(--border);display:flex;jus
       </div>
       <div class="proj-metric">↓ 40% monthly reporting effort</div>
       <div class="proj-links">
-        <a href="dashboard.html" target="_blank" class="proj-link"><i class="ti ti-chart-line" aria-hidden="true"></i> View Live Dashboard</a>
+        <a href="#dashboard" class="proj-link"><i class="ti ti-chart-line" aria-hidden="true"></i> View Live Dashboard</a>
         <a href="https://github.com/parthasarathi2012/sales-performance-dashboard-excel" target="_blank" class="proj-link"><i class="ti ti-brand-github" aria-hidden="true"></i> Source</a>
       </div>
     </div>
@@ -392,6 +419,66 @@ footer{padding:1.5rem 4rem;border-top:0.5px solid var(--border);display:flex;jus
     </div>
   </div>
 </section>
+
+<!-- LIVE DASHBOARD -->
+<div class="dash-section" id="dashboard">
+  <div class="dash-inner">
+    <div class="sec-header reveal">
+      <div class="sec-tag">Live Data Project</div>
+      <div class="sec-title">Sales Performance Dashboard</div>
+    </div>
+
+    <div class="dash-kpi-grid reveal">
+      <div class="dash-kpi">
+        <div class="dk-label">Total Revenue</div>
+        <div class="dk-value">₹1,54,69,300</div>
+      </div>
+      <div class="dash-kpi">
+        <div class="dk-label">Total Profit</div>
+        <div class="dk-value good">₹48,59,521</div>
+      </div>
+      <div class="dash-kpi">
+        <div class="dk-label">Profit Margin</div>
+        <div class="dk-value">31.4%</div>
+      </div>
+      <div class="dash-kpi">
+        <div class="dk-label">Total Orders</div>
+        <div class="dk-value">90</div>
+      </div>
+    </div>
+
+    <div class="dash-grid reveal">
+      <div class="dash-panel">
+        <h3>Revenue &amp; Profit by Region</h3>
+        <div class="dash-chart-box"><canvas id="regionChart"></canvas></div>
+      </div>
+      <div class="dash-panel">
+        <h3>Revenue Share by Category</h3>
+        <div class="dash-chart-box"><canvas id="categoryChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="dash-panel reveal">
+      <h3>Region-wise Summary</h3>
+      <table class="dash-table">
+        <thead>
+          <tr><th>Region</th><th>Revenue (₹)</th><th>Profit (₹)</th><th>Orders</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>North</td><td>55,87,400</td><td>17,65,039</td><td>28</td></tr>
+          <tr><td>South</td><td>31,36,400</td><td>9,65,757</td><td>18</td></tr>
+          <tr><td>East</td><td>36,58,900</td><td>11,62,788</td><td>20</td></tr>
+          <tr><td>West</td><td>30,86,600</td><td>9,65,937</td><td>24</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="dash-note reveal">
+      Built with Oracle SQL-style SUMIFS/VLOOKUP logic, replicated here as a live web dashboard using Chart.js.
+      <a href="https://github.com/parthasarathi2012/sales-performance-dashboard-excel" target="_blank" style="color:var(--gold);text-decoration:none;font-weight:500;">View source Excel workbook on GitHub →</a>
+    </div>
+  </div>
+</div>
 
 <!-- SQL SHOWCASE -->
 <div class="sql-section" id="sql">
@@ -531,6 +618,48 @@ document.querySelector('.ham').addEventListener('click', () => {
     nl.style.display = 'none';
   } else {
     nl.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:56px;left:0;right:0;background:rgba(7,7,15,0.98);padding:1rem 2rem;gap:1rem;border-bottom:0.5px solid #1e1e38;';
+  }
+});
+
+/* LIVE DASHBOARD CHARTS */
+const regionLabels = ["North","South","East","West"];
+const revenueData = [5587400, 3136400, 3658900, 3086600];
+const profitData  = [1765039, 965757, 1162788, 965937];
+
+new Chart(document.getElementById('regionChart'), {
+  type: 'bar',
+  data: {
+    labels: regionLabels,
+    datasets: [
+      { label:'Revenue (₹)', data: revenueData, backgroundColor:'#c8a96e', borderRadius:4 },
+      { label:'Profit (₹)', data: profitData, backgroundColor:'#5b5b8a', borderRadius:4 }
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{ color:'#9999bb', boxWidth:12, font:{size:11} } } },
+    scales:{
+      y:{ ticks:{ color:'#666688', callback:v => '₹'+(v/100000).toFixed(0)+'L', font:{size:10} }, grid:{color:'#1e1e38'} },
+      x:{ ticks:{ color:'#9999bb' }, grid:{display:false} }
+    }
+  }
+});
+
+new Chart(document.getElementById('categoryChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ["Computing","Peripherals","Accessories"],
+    datasets: [{
+      data: [11935000, 2686300, 848000],
+      backgroundColor: ['#c8a96e','#8888cc','#3a3a5a'],
+      borderWidth: 2,
+      borderColor: '#0d0d1f'
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{ color:'#9999bb', boxWidth:12, font:{size:11} } } },
+    cutout:'62%'
   }
 });
 </script>
